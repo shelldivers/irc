@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: Suggest an idea for this project
-title: "[FEAT] {ISSUE NAME} #{ISSUE NUMBER}"
+title: "[FEAT] {ISSUE NAME}"
 labels: enhancement
 assignees: ''
 
