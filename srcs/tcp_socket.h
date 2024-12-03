@@ -20,7 +20,7 @@ extern "C" {
 #include <stdexcept>
 #include <string>
 
-typedef struct sockaddr_in6 InetSocketAddress;
+typedef struct sockaddr_in InetSocketAddress;
 
 class TcpSocket {
  private:
@@ -36,15 +36,17 @@ class TcpSocket {
   InetSocketAddress inet_sock_address_;
 
  public:
-  TcpSocket(std::string const &port_number);  // server socket, getaddrinfo
-  TcpSocket(int const listen_sock_fd);        // client socket, accepted socket
+  explicit TcpSocket(
+      std::string const &port_number);  // server socket, getaddrinfo
+  explicit TcpSocket(
+      int const listen_sock_fd);  // client socket, accepted socket
   ~TcpSocket();
 
   int socket_fd();
   bool is_listen_only();
 
   in_port_t GetPortNum();
-  char const *GetIPAddress();
+  in_addr_t GetIPAddress();
 
   class SocketCreationFailError : public std::runtime_error {
    public:
