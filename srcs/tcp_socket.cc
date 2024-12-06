@@ -6,6 +6,7 @@ extern "C" {
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
+#include <stdexcept>
 
 #include "tcp_socket.h"
 
@@ -15,7 +16,8 @@ TcpSocket::TcpSocket(std::string const &port_number) try
     : cur_inet_sock_addr_len_(kInetSocketAddrLen),
       socket_fd_(socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)),
       is_listen_only_(true) {
-  if (socket_fd_ == -1) throw SocketCreationFailError();
+  if (socket_fd_ == -1)
+    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
 
   memset(&inet_sock_address_, 0, sizeof(InetSocketAddress));
   inet_sock_address_.sin_family = AF_INET;
@@ -23,16 +25,16 @@ TcpSocket::TcpSocket(std::string const &port_number) try
   inet_sock_address_.sin_addr.s_addr = htonl(INADDR_ANY);
   if (bind(socket_fd_, reinterpret_cast<struct sockaddr *>(&inet_sock_address_),
            kInetSocketAddrLen) == -1)
-    throw SocketCreationFailError();
+    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
 
   // reuse addr and port
   const int sock_reuse_opt = 1;
   if (setsockopt(socket_fd_, SOL_SOCKET, SO_REUSEADDR, &sock_reuse_opt,
                  sizeof(sock_reuse_opt)) == -1)
-    throw SocketCreationFailError();
+    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
 
   if (listen(socket_fd_, FTIRC_SRCS_SOCKET_REQUEST_QUEUE_SIZE) == -1)
-    throw SocketCreationFailError();
+    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
 
 } catch (const std::exception &e) {
   std::cerr << e.what() << '\n';
@@ -47,17 +49,18 @@ TcpSocket::TcpSocket(int const listen_sock_fd) try
                  reinterpret_cast<struct sockaddr *>(&inet_sock_address_),
                  &cur_inet_sock_addr_len_)),
       is_listen_only_(false) {
-  if (socket_fd_ == -1) throw SocketCreationFailError();
+  if (socket_fd_ == -1)
+    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
 
   if (cur_inet_sock_addr_len_ >
       kInetSocketAddrLen)  // accept error, truncated, when?
-    throw SocketCreationFailError();
+    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
 
   // reuse addr and port
   const int sock_reuse_opt = 1;
   if (setsockopt(socket_fd_, SOL_SOCKET, SO_REUSEADDR, &sock_reuse_opt,
                  sizeof(sock_reuse_opt)) == -1)
-    throw SocketCreationFailError();
+    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
 
 } catch (const std::exception &e) {
   std::cerr << e.what() << '\n';
@@ -74,8 +77,4 @@ in_port_t TcpSocket::GetPortNum() { return ntohs(inet_sock_address_.sin_port); }
 
 in_addr_t TcpSocket::GetIPAddress() {
   return ntohl(inet_sock_address_.sin_addr.s_addr);
-}
-
-const char *TcpSocket::SocketCreationFailError::what() {
-  return "Tcp Socket Creation Failed.";
 }

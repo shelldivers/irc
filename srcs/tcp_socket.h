@@ -12,12 +12,12 @@
 #define FTIRC_SRCS_TCP_SOCKET_H
 
 #define FTIRC_SRCS_SOCKET_REQUEST_QUEUE_SIZE 50
+#define FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE "Tcp Socket Creation Failed."
 
 extern "C" {
 #include <netinet/in.h>
 }
 
-#include <stdexcept>
 #include <string>
 
 typedef struct sockaddr_in InetSocketAddress;
@@ -47,11 +47,6 @@ class TcpSocket {
 
   in_port_t GetPortNum();
   in_addr_t GetIPAddress();
-
-  class SocketCreationFailError : public std::runtime_error {
-   public:
-    const char *what();
-  };
 };
 
 #endif
