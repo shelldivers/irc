@@ -23,14 +23,15 @@ TcpSocket::TcpSocket(std::string const &port_number) try
   inet_sock_address_.sin_family = AF_INET;
   inet_sock_address_.sin_port = htons(atoi(port_number.c_str()));
   inet_sock_address_.sin_addr.s_addr = htonl(INADDR_ANY);
-  if (bind(socket_fd_, reinterpret_cast<struct sockaddr *>(&inet_sock_address_),
-           kInetSocketAddrLen) == -1)
-    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
 
   // reuse addr and port
   const int sock_reuse_opt = 1;
   if (setsockopt(socket_fd_, SOL_SOCKET, SO_REUSEADDR, &sock_reuse_opt,
                  sizeof(sock_reuse_opt)) == -1)
+    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
+
+  if (bind(socket_fd_, reinterpret_cast<struct sockaddr *>(&inet_sock_address_),
+           kInetSocketAddrLen) == -1)
     throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
 
   if (listen(socket_fd_, FTIRC_SRCS_SOCKET_REQUEST_QUEUE_SIZE) == -1)
