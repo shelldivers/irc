@@ -5,18 +5,6 @@ Date: 2024-12-03
 # Description
 유닉스 소켓 프로그래밍을 위해서 추상화 한 TCP 소켓 객체, IPv6와 IPv4를 모두 지원한다.
 
-# Attributes
-## Member Variable
-### 1. socket_fd_ - private
-소켓의 file descriptor. systemcall에 전달되는 핸들. RAII.
-
-### 2. is_listen_only - private
-소켓의 listening 여부를 위한 필드. RAII.
-
-### 3. sockaddr_in
-해당 소켓의 바인드 정보를 저장하는 구조체.
-프로토콜 정보, 포트 번호, IP 주소를 저장함.
-
 두 가지 주의 점이 존재한다.
 
 - 1. IPv4 mapped IPv6 IP
@@ -39,6 +27,6 @@ Date: 2024-12-03
 
 	-> 인용 : https://man7.org/linux/man-pages/man7/ipv6.7.html
 
-- 본래 계획대로였다면, 해당 설계를 바탕으로 IPv4와 IPv6에 모두 대응되는 소켓을 구현할 계획이었으나, FTP를 위해서 일단 IPv4로 구현한다.
+**본래 계획대로였다면, 해당 설계를 바탕으로 IPv4와 IPv6에 모두 대응되는 소켓을 구현할 계획이었으나, FTP를 위해서 일단 IPv4로 구현한다.**
 
 
