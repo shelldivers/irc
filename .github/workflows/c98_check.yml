@@ -23,8 +23,4 @@ jobs:
 
     - name: Compile with C++98
       run: |
-        g++ -std=c++98 -Wall -Wextra -Werror -o app main.cpp
-
-    - name: Run the application
-      run: |
-        ./app
+        make
