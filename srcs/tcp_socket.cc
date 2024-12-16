@@ -1,5 +1,6 @@
 
 extern "C" {
+#include <fcntl.h>
 #include <unistd.h>
 }
 
@@ -37,6 +38,13 @@ TcpSocket::TcpSocket(std::string const &port_number) try
   if (listen(socket_fd_, FTIRC_SRCS_SOCKET_REQUEST_QUEUE_SIZE) == -1)
     throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
 
+  // non-block socket
+  int flag = fcntl(socket_fd_, F_GETFL, 0);
+  if (flag == -1)
+    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
+  if (fcntl(socket_fd_, F_SETFL, flag | O_NONBLOCK) == -1)
+    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
+
 } catch (const std::exception &e) {
   std::cerr << e.what() << '\n';
   throw;
@@ -61,6 +69,13 @@ TcpSocket::TcpSocket(int const listen_sock_fd) try
   const int sock_reuse_opt = 1;
   if (setsockopt(socket_fd_, SOL_SOCKET, SO_REUSEADDR, &sock_reuse_opt,
                  sizeof(sock_reuse_opt)) == -1)
+    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
+
+  // non-block socket
+  int flag = fcntl(socket_fd_, F_GETFL, 0);
+  if (flag == -1)
+    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
+  if (fcntl(socket_fd_, F_SETFL, flag | O_NONBLOCK) == -1)
     throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
 
 } catch (const std::exception &e) {
