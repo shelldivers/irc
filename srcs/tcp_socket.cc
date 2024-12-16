@@ -11,7 +11,10 @@ extern "C" {
 
 #include "tcp_socket.h"
 
-socklen_t const TcpSocket::kInetSocketAddrLen = sizeof(InetSocketAddress);
+namespace Just1RCe {
+
+socklen_t const Just1RCe::TcpSocket::kInetSocketAddrLen =
+    sizeof(InetSocketAddress);
 
 TcpSocket::TcpSocket(std::string const &port_number) try
     : cur_inet_sock_addr_len_(kInetSocketAddrLen),
@@ -94,3 +97,5 @@ in_port_t TcpSocket::GetPortNum() { return ntohs(inet_sock_address_.sin_port); }
 in_addr_t TcpSocket::GetIPAddress() {
   return ntohl(inet_sock_address_.sin_addr.s_addr);
 }
+
+}  // namespace Just1RCe

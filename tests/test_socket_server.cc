@@ -19,6 +19,7 @@ extern "C" {
 #include "../srcs/tcp_socket.h"
 
 #define BUFF_SIZE 1024
+using namespace Just1RCe;
 
 int main() {
   char buff_rcv[BUFF_SIZE + 5];

@@ -20,6 +20,8 @@ extern "C" {
 
 #include <string>
 
+namespace Just1RCe {
+
 typedef struct sockaddr_in InetSocketAddress;
 
 class TcpSocket {
@@ -48,5 +50,7 @@ class TcpSocket {
   in_port_t GetPortNum();
   in_addr_t GetIPAddress();
 };
+
+}  // namespace Just1RCe
 
 #endif
