@@ -1,0 +1,23 @@
+name: C++ Linting
+
+on:
+  [push, pull_request]
+
+jobs:
+  cpplint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install cpplint
+        run: pip install cpplint
+      - name: For globstar  
+        run: shopt -s globstar
+      - name: Run cpplint
+        run: find . -name "*.cpp" -o -name "*.hpp" | xargs cpplint
+        # run: git diff --name-only --diff-filter=AM HEAD~1 HEAD -- '*.cpp' '*.hpp' | xargs cpplint
+

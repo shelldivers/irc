@@ -1,0 +1,36 @@
+name: cppCheck
+
+on:
+  [push, pull_request]
+
+jobs:
+  cppcheck:
+    runs-on: ubuntu-24.04
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: |
+          sudo apt-get install -y cppcheck
+
+      - run: |
+          sudo apt-get install -y libxml2-utils
+
+      - run: |
+          cppcheck --enable=all --xml --output-file=report.xml .
+
+      - run: |
+          xmllint --xpath '//error[not(@severity="information")]' report.xml > filtered_report.xml
+
+      - uses: Flast/cppcheck-sarif@v2
+        with:
+          input: report.xml
+          output: report.sarif
+
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: report.sarif
+          category: cppcheck

@@ -1,0 +1,28 @@
+name: C++98 Compatibility Check
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  cpp98-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install g++
+      run: sudo apt-get update && sudo apt-get install -y g++
+
+    - name: Compile with C++98
+      run: |
+        g++ -std=c++98 -Wall -Wextra -Werror -o app main.cpp
+
+    - name: Run the application
+      run: ./app
