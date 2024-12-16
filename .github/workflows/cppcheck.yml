@@ -13,6 +13,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check for C++ files
+        run: |
+          if ls **/*.cpp **/*.hpp > /dev/null 2>&1; then
+            echo "C++ files found. Proceeding with linting."
+          else
+            echo "No C++ files found. Skipping linting."
+            exit 0
+          fi
+
       - name: install cppcheck
         run: |
           sudo apt-get install -y cppcheck
