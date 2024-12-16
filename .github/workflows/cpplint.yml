@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        
+
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
@@ -22,6 +22,15 @@ jobs:
       - name: For globstar  
         run: |
           shopt -s globstar
+
+      - name: Check for C++ files
+        run: |
+          if ls **/*.cpp **/*.hpp > /dev/null 2>&1; then
+            echo "C++ files found. Proceeding with linting."
+          else
+            echo "No C++ files found. Skipping linting."
+            exit 0
+          fi
 
       - name: Run cpplint
         run: |
