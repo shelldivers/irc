@@ -22,12 +22,12 @@ jobs:
           fi
 
       - name: install cppcheck
-        if: env.EXIT_WORKFLOW != true;
+        if: env.EXIT_WORKFLOW != true
         run: |
           sudo apt-get install -y cppcheck
 
       - name: install xmllint
-        if: env.EXIT_WORKFLOW != true; 
+        if: env.EXIT_WORKFLOW != true;
         run: |
           sudo apt-get install -y libxml2-utils
 

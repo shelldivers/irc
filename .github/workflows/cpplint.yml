@@ -26,13 +26,13 @@ jobs:
       - name: Check for C++ files
         run: |
           if ls **/*.cpp **/*.hpp > /dev/null 2>&1; then
-            echo "C++ files found. Proceeding with linting."
+            echo "EXIT_WORKFLOW=false" >> $GITHUB_ENV
           else
-            echo "No C++ files found. Skipping linting."
-            exit 0
+            echo "EXIT_WORKFLOW=true" >> $GITHUB_ENV
           fi
 
       - name: Run cpplint
+        if: env.EXIT_WORKFLOW != true
         run: |
           find . -name "*.cpp" -o -name "*.hpp" | xargs cpplint
           # run: git diff --name-only --diff-filter=AM HEAD~1 HEAD -- '*.cpp' '*.hpp' | xargs cpplint
