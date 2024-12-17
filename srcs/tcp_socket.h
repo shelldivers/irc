@@ -45,10 +45,8 @@ class TcpSocket {
   InetSocketAddress inet_sock_address_;
 
  public:
-  explicit TcpSocket(
-      std::string const &port_number);  // server socket, getaddrinfo
-  explicit TcpSocket(
-      int const listen_sock_fd);  // client socket, accepted socket
+  explicit TcpSocket(std::string const &port_number);
+  explicit TcpSocket(int const listen_sock_fd);
   ~TcpSocket();
 
   int socket_fd();

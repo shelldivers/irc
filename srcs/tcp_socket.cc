@@ -53,8 +53,7 @@ TcpSocket::TcpSocket(std::string const &port_number) try
 }
 
 TcpSocket::TcpSocket(int const listen_sock_fd) try
-    : cur_inet_sock_addr_len_(
-          kInetSocketAddrLen),  // this field will be overlapped by accept
+    : cur_inet_sock_addr_len_(kInetSocketAddrLen),
       socket_fd_(
           accept(listen_sock_fd,
                  reinterpret_cast<struct sockaddr *>(&inet_sock_address_),
@@ -62,8 +61,7 @@ TcpSocket::TcpSocket(int const listen_sock_fd) try
       is_listen_only_(false) {
   if (socket_fd_ == -1) throw std::runtime_error(JUST1RCE_SRCS_ACCEPT_ERROR);
 
-  if (cur_inet_sock_addr_len_ >
-      kInetSocketAddrLen)  // accept error, truncated, when?
+  if (cur_inet_sock_addr_len_ > kInetSocketAddrLen)
     throw std::runtime_error(JUST1RCE_SRCS_ACCEPT_ERROR);
 
   // reuse addr and port
