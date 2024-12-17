@@ -8,11 +8,12 @@
                 -> dual stack socket, handle IPv4 using IPv6.
 */
 
-#ifndef FTIRC_SRCS_TCP_SOCKET_H
-#define FTIRC_SRCS_TCP_SOCKET_H
+#ifndef JUST1RCE_SRCS_TCP_SOCKET_H
+#define JUST1RCE_SRCS_TCP_SOCKET_H
 
-#define FTIRC_SRCS_SOCKET_REQUEST_QUEUE_SIZE 50
-#define FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE "Tcp Socket Creation Failed."
+#define JUST1RCE_SRCS_SOCKET_REQUEST_QUEUE_SIZE 50
+#define JUST1RCE_SRCS_SOCKET_CREATION_ERROR_MESSAGE \
+  "Tcp Socket Creation Failed."
 
 extern "C" {
 #include <netinet/in.h>

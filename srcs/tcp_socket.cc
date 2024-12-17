@@ -21,7 +21,7 @@ TcpSocket::TcpSocket(std::string const &port_number) try
       socket_fd_(socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)),
       is_listen_only_(true) {
   if (socket_fd_ == -1)
-    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
+    throw std::runtime_error(JUST1RCE_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
 
   memset(&inet_sock_address_, 0, sizeof(InetSocketAddress));
   inet_sock_address_.sin_family = AF_INET;
@@ -32,21 +32,21 @@ TcpSocket::TcpSocket(std::string const &port_number) try
   const int sock_reuse_opt = 1;
   if (setsockopt(socket_fd_, SOL_SOCKET, SO_REUSEADDR, &sock_reuse_opt,
                  sizeof(sock_reuse_opt)) == -1)
-    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
+    throw std::runtime_error(JUST1RCE_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
 
   if (bind(socket_fd_, reinterpret_cast<struct sockaddr *>(&inet_sock_address_),
            kInetSocketAddrLen) == -1)
-    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
+    throw std::runtime_error(JUST1RCE_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
 
-  if (listen(socket_fd_, FTIRC_SRCS_SOCKET_REQUEST_QUEUE_SIZE) == -1)
-    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
+  if (listen(socket_fd_, JUST1RCE_SRCS_SOCKET_REQUEST_QUEUE_SIZE) == -1)
+    throw std::runtime_error(JUST1RCE_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
 
   // non-block socket
   int flag = fcntl(socket_fd_, F_GETFL, 0);
   if (flag == -1)
-    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
+    throw std::runtime_error(JUST1RCE_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
   if (fcntl(socket_fd_, F_SETFL, flag | O_NONBLOCK) == -1)
-    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
+    throw std::runtime_error(JUST1RCE_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
 
 } catch (const std::exception &e) {
   std::cerr << e.what() << '\n';
@@ -62,24 +62,24 @@ TcpSocket::TcpSocket(int const listen_sock_fd) try
                  &cur_inet_sock_addr_len_)),
       is_listen_only_(false) {
   if (socket_fd_ == -1)
-    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
+    throw std::runtime_error(JUST1RCE_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
 
   if (cur_inet_sock_addr_len_ >
       kInetSocketAddrLen)  // accept error, truncated, when?
-    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
+    throw std::runtime_error(JUST1RCE_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
 
   // reuse addr and port
   const int sock_reuse_opt = 1;
   if (setsockopt(socket_fd_, SOL_SOCKET, SO_REUSEADDR, &sock_reuse_opt,
                  sizeof(sock_reuse_opt)) == -1)
-    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
+    throw std::runtime_error(JUST1RCE_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
 
   // non-block socket
   int flag = fcntl(socket_fd_, F_GETFL, 0);
   if (flag == -1)
-    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
+    throw std::runtime_error(JUST1RCE_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
   if (fcntl(socket_fd_, F_SETFL, flag | O_NONBLOCK) == -1)
-    throw std::runtime_error(FTIRC_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
+    throw std::runtime_error(JUST1RCE_SRCS_SOCKET_CREATION_ERROR_MESSAGE);
 
 } catch (const std::exception &e) {
   std::cerr << e.what() << '\n';
