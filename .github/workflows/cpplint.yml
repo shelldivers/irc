@@ -23,17 +23,17 @@ jobs:
         run: |
           shopt -s globstar
 
-      - name: Check for C++ files
+      - name: Generate file list
         run: |
-          if ls **/*.cpp **/*.hpp > /dev/null 2>&1; then
-            echo "EXIT_WORKFLOW=false" >> $GITHUB_ENV
-          else
-            echo "EXIT_WORKFLOW=true" >> $GITHUB_ENV
-          fi
+          find . -name "*.cc" -o -name "*.h" > file_list.txt
+          
 
       - name: Run cpplint
-        if: env.EXIT_WORKFLOW != true
         run: |
-          find . -name "*.cpp" -o -name "*.hpp" | xargs cpplint
-          # run: git diff --name-only --diff-filter=AM HEAD~1 HEAD -- '*.cpp' '*.hpp' | xargs cpplint
+          if [ ! -s file_list.txt ]; then
+            echo "No C++ files found."
+            exit 0
+          else
+            xargs cpplint < file_list.txt
+          fi
 
