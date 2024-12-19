@@ -78,6 +78,7 @@ TcpSocket::TcpSocket(int const listen_sock_fd) try
 
 } catch (const std::exception &e) {
   std::cerr << e.what() << '\n';
+  throw;
 }
 
 TcpSocket::~TcpSocket() { close(socket_fd_); }
