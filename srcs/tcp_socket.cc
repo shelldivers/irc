@@ -83,14 +83,16 @@ TcpSocket::TcpSocket(int const listen_sock_fd) try
 
 TcpSocket::~TcpSocket() { close(socket_fd_); }
 
-int TcpSocket::socket_fd() { return socket_fd_; }
+int TcpSocket::socket_fd() const { return socket_fd_; }
 
-bool TcpSocket::is_listen_only() { return is_listen_only_; }
+bool TcpSocket::is_listen_only() const { return is_listen_only_; }
 
 // return port number in host order
-in_port_t TcpSocket::GetPortNum() { return ntohs(inet_sock_address_.sin_port); }
+in_port_t TcpSocket::GetPortNum() const {
+  return ntohs(inet_sock_address_.sin_port);
+}
 
-in_addr_t TcpSocket::GetIPAddress() {
+in_addr_t TcpSocket::GetIPAddress() const {
   return ntohl(inet_sock_address_.sin_addr.s_addr);
 }
 
