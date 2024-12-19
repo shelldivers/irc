@@ -16,6 +16,18 @@ namespace Just1RCe {
 socklen_t const Just1RCe::TcpSocket::kInetSocketAddrLen =
     sizeof(InetSocketAddress);
 
+/**
+ *
+ * @brief Construct Server-side socket.
+ * @details bind to any available ip, listen-only, reuse-address, non-blocking
+ * io
+ * @param port_number port number for the socket to bind
+ *
+ * @return binded, listen-only socket object
+ *
+ * @throws std::runtime_error with error message
+ *
+ */
 TcpSocket::TcpSocket(std::string const &port_number) try
     : cur_inet_sock_addr_len_(kInetSocketAddrLen),
       socket_fd_(socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)),
@@ -52,6 +64,17 @@ TcpSocket::TcpSocket(std::string const &port_number) try
   throw;
 }
 
+/**
+ *
+ * @brief Construct Client-side socket.
+ * @details reuse-address, non-blocking io
+ * @param listen_sock_fd fd of listen-only socket
+ *
+ * @return accepted, listen-only socket object
+ *
+ * @throws std::runtime_error with error message
+ *
+ */
 TcpSocket::TcpSocket(int const listen_sock_fd) try
     : cur_inet_sock_addr_len_(kInetSocketAddrLen),
       socket_fd_(
@@ -78,18 +101,60 @@ TcpSocket::TcpSocket(int const listen_sock_fd) try
 
 } catch (const std::exception &e) {
   std::cerr << e.what() << '\n';
+  throw;
 }
 
+/**
+ *
+ * @brief Destruct socket.
+ * @details close socket's fd
+ *
+ * @return no return values
+ *
+ * @throws no exceptions
+ *
+ */
 TcpSocket::~TcpSocket() { close(socket_fd_); }
 
-int TcpSocket::socket_fd() { return socket_fd_; }
+/**
+ *
+ * @brief getter for the socket's fd
+ *
+ * @return socket's fd
+ *
+ * @throws non
+ *
+ */
+int TcpSocket::socket_fd() const { return socket_fd_; }
 
-bool TcpSocket::is_listen_only() { return is_listen_only_; }
+/**
+ *
+ * @return bool value, true if the socket is binded to the server
+ *
+ * @throws non
+ *
+ */
+bool TcpSocket::is_listen_only() const { return is_listen_only_; }
 
-// return port number in host order
-in_port_t TcpSocket::GetPortNum() { return ntohs(inet_sock_address_.sin_port); }
+/**
+ *
+ * @return unsigned int, port number in host order
+ *
+ * @throws non
+ *
+ */
+in_port_t TcpSocket::GetPortNum() const {
+  return ntohs(inet_sock_address_.sin_port);
+}
 
-in_addr_t TcpSocket::GetIPAddress() {
+/**
+ *
+ * @return unsigned int, IP address in host order
+ *
+ * @throws non
+ *
+ */
+in_addr_t TcpSocket::GetIPAddress() const {
   return ntohl(inet_sock_address_.sin_addr.s_addr);
 }
 
