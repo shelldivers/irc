@@ -31,6 +31,14 @@ namespace Just1RCe {
 
 typedef struct sockaddr_in InetSocketAddress;
 
+/**
+ *
+ * @brief abstraction of TCP/IPv4 socket.
+ * @details Reuse-address, Non-blocking IO available.
+ * @author eldeshue
+ * @date 2024-12-19
+ *
+ */
 class TcpSocket {
  private:
   TcpSocket();
